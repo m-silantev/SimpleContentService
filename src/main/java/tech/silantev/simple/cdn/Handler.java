@@ -1,32 +1,37 @@
 package tech.silantev.simple.cdn;
 
-import java.io.File;
-import java.io.FileInputStream;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class Server {
+public class Handler implements HttpHandler {
 
-    public void listen(int port) {
-        try (ServerSocket serverSocket = new ServerSocket(port);) {
-            System.out.println("Now serving at <http://localhost>:" + port);
-            while (!Thread.currentThread().isInterrupted()) {
-                Socket clientSocket = serverSocket.accept();
-                Thread thread = new Thread(() -> handleClientRequest(clientSocket));
-                thread.start();
-            }
-        } catch (IOException e) {
+    @Override
+    public void handle(HttpExchange t) {
+        try {
+            URI requestURI = t.getRequestURI();
+            Path path = Paths.get(requestURI.getPath()).getName(0);
+            byte[] bytes = Files.readAllBytes(path);
+            t.sendResponseHeaders(200, bytes.length);
+            OutputStream os = t.getResponseBody();
+            os.write(bytes);
+            os.close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void handleClientRequest(Socket clientSocket) {
+    private void handleClientRequest(Socket clientSocket) throws IOException {
+
         try {
             InputStream clientIn = clientSocket.getInputStream();
             OutputStream clientOut = clientSocket.getOutputStream();
@@ -48,16 +53,17 @@ public class Server {
             clientOut.flush();
 
             // Close the sockets
-            clientSocket.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            clientSocket.close();
         }
     }
 
     private String extractTargetUrl(String request) {
         String[] lines = request.split("\\r\\n");
         String[] requestLine = lines[0].split(" ");
-        return requestLine[1];
+        return requestLine[1].replace("/", "./");
     }
 }
 
