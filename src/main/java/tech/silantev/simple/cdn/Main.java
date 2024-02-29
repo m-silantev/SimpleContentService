@@ -18,7 +18,9 @@ public class Main {
         if (!file.exists()) {
             try {
                 file.createNewFile();
-                Files.write(file.toPath(), "pauseMs=500\n".getBytes());
+                String defaultProperties = "pauseMs=500\n" +
+                        "port=8081\n";
+                Files.write(file.toPath(), defaultProperties.getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
             }
