@@ -16,8 +16,8 @@ public class Properties {
     }
 
     public Properties(java.util.Properties properties) {
-        this.port = Integer.parseInt(properties.getProperty(Property.PORT.nameInFile));
-        this.pause = Duration.ofMillis(Long.parseLong(properties.getProperty(Property.PAUSE.nameInFile)));
+        this.port = Property.PORT.asInt(properties);
+        this.pause = Duration.ofMillis(Property.PAUSE.asInt(properties));
     }
 
     public int getPort() {
@@ -46,6 +46,11 @@ public class Properties {
             return Arrays.stream(values())
                     .map(name -> name.nameInFile + "=" + name.defaultValue + "\n")
                     .collect(Collectors.joining());
+        }
+
+        public int asInt(java.util.Properties properties) {
+            String fromFile = properties.getProperty(nameInFile);
+            return Integer.parseInt(fromFile == null || fromFile.isEmpty() ? defaultValue : fromFile);
         }
     }
 }
