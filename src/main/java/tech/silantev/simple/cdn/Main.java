@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Properties;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -13,7 +12,7 @@ public class Main {
     }
 
     private static Properties loadProperties() {
-        Properties properties = new Properties();
+        java.util.Properties util = new java.util.Properties();
         File file = new File("application.properties");
         if (!file.exists()) {
             try {
@@ -26,10 +25,10 @@ public class Main {
             }
         }
         try (FileInputStream fis = new FileInputStream(file)) {
-            properties.load(fis);
+            util.load(fis);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return properties;
+        return new Properties(util);
     }
 }

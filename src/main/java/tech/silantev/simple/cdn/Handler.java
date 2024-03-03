@@ -8,16 +8,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
-import java.util.Optional;
-import java.util.Properties;
 
 public class Handler implements HttpHandler {
 
     private final Duration pause;
 
     public Handler(Properties properties) {
-        String pauseMs = Optional.ofNullable(properties.getProperty("pauseMs")).orElse("0");
-        this.pause = Duration.ofMillis(Long.parseLong(pauseMs));
+        this.pause = properties.getPause();
     }
 
     @Override

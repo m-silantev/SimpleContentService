@@ -3,8 +3,6 @@ package tech.silantev.simple.cdn;
 import com.sun.net.httpserver.HttpServer;
 
 import java.net.InetSocketAddress;
-import java.util.Optional;
-import java.util.Properties;
 
 public class App {
 
@@ -15,8 +13,7 @@ public class App {
     }
 
     public void start() throws Exception {
-        int port = Integer.parseInt(Optional.ofNullable(properties.getProperty("port")).orElse("8081"));
-        HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
+        HttpServer server = HttpServer.create(new InetSocketAddress(properties.getPort()), 0);
         server.createContext("/", new Handler(properties));
         server.setExecutor(null); // creates a default executor
         server.start();
