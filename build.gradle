@@ -2,6 +2,13 @@ plugins {
     id 'java'
 }
 
+project.sourceCompatibility = '1.8'
+/*
+compileJava   {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+}*/
+
 group = 'tech.silantev.simple.cdn'
 version = '1.0.3'
 
