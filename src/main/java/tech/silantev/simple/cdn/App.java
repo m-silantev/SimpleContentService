@@ -1,6 +1,7 @@
 package tech.silantev.simple.cdn;
 
 import com.sun.net.httpserver.HttpServer;
+import tech.silantev.simple.cdn.properties.Properties;
 
 import java.net.InetSocketAddress;
 

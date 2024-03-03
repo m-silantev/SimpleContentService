@@ -2,6 +2,7 @@ package tech.silantev.simple.cdn;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import tech.silantev.simple.cdn.properties.Properties;
 
 import java.io.OutputStream;
 import java.nio.file.Files;
